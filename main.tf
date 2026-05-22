@@ -1,24 +1,12 @@
-data "aws_ami" "ubuntu" {
-  most_recent = true
+module "ec2" {
+  source = "./modules/ec2"
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  # MUST pass both providers (customer pattern)
+  providers = {
+    aws     = aws
+    aws.kms = aws.kms
   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"]
-}
-
-resource "aws_instance" "this" {
-  ami           = data.aws_ami.ubuntu.id
+  name          = var.name
   instance_type = var.instance_type
-
-  tags = {
-    Name = var.name
-  }
 }

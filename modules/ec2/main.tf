@@ -1,12 +1,19 @@
-module "ec2" {
-  source = "./modules/ec2"
+data "aws_ami" "ubuntu" {
+  most_recent = true
 
-  # Important: module expects aws.kms, so pass it
-  providers = {
-    aws     = aws
-    aws.kms = aws.kms
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
-  name          = var.name
+  owners = ["099720109477"]
+}
+
+resource "aws_instance" "this" {
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
+
+  tags = {
+    Name = var.name
+  }
 }
