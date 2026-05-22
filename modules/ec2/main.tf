@@ -11,13 +11,13 @@ provider "aws" {
   shared_config_files = [var.tfc_aws_dynamic_credentials.aliases["kms"].shared_config_file]
 }
 
+
 module "ec2" {
   source = "./modules/ec2"
 
-  # Pass default provider; also pass aws.kms to match customer pattern
+  # Only default provider; module inherits this anyway
   providers = {
-    aws     = aws
-    aws.kms = aws.kms
+    aws = aws
   }
 
   name          = var.name
