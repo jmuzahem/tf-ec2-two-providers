@@ -5,6 +5,7 @@ module "ec2" {
   providers = {
     aws     = aws
     aws.kms = aws.kms
+    profile = "myprofileshare"
   }
 
   name          = var.name
